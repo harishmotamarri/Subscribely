@@ -1,0 +1,12 @@
+{
+  "name": "fsd-root",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run frontend\" \"npm run backend\"",
+    "frontend": "cd frontend && npm run dev",
+    "backend": "cd backend && python manage.py runserver"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
