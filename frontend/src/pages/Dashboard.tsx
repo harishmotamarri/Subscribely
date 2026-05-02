@@ -1,24 +1,34 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { getDashboard } from "../api/api";
 import { Link } from "react-router-dom";
 
 function Dashboard() {
-  const [subs, setSubs] = useState([]);
+  const [subs, setSubs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  const getSafeUser = () => {
+    try {
+      const userData = localStorage.getItem("user");
+      return userData ? JSON.parse(userData) : null;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const user = getSafeUser();
 
   useEffect(() => {
-    if (user) {
+    if (user && user.id) {
       fetchDashboard();
+    } else {
+      setLoading(false);
     }
   }, []);
 
   const fetchDashboard = async () => {
     try {
-      const res = await axios.get(
-        `http://127.0.0.1:8000/api/dashboard/${user.id}/`
-      );
-      setSubs(res.data);
+      const res = await getDashboard(user.id);
+      setSubs(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
       console.error("Failed to fetch subscriptions", error);
     } finally {

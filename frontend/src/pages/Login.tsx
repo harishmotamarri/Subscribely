@@ -10,13 +10,13 @@ function Login() {
   const handleLogin = async () => {
     try {
       const response = await loginUser({ email, password });
-      if (response.data.error) {
-        alert(response.data.error);
-      } else {
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        localStorage.setItem("token", response.data.token);
-        navigate("/dashboard");
-      }
+        if (response.data.error) {
+          alert(response.data.error);
+        } else {
+          localStorage.setItem("user", JSON.stringify(response.data.user || null));
+          localStorage.setItem("token", response.data.token || "");
+          navigate("/dashboard");
+        }
     } catch (error: any) {
       alert("Login failed! Please check your credentials.");
       console.error(error);

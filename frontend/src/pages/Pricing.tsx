@@ -21,7 +21,15 @@ function Pricing() {
   };
 
   const handleSubscribe = async (plan: any) => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const getSafeUser = () => {
+      try {
+        const userData = localStorage.getItem("user");
+        return userData ? JSON.parse(userData) : null;
+      } catch (e) {
+        return null;
+      }
+    };
+    const user = getSafeUser();
 
     if (!user) {
       alert("Please login first to subscribe!");
@@ -50,7 +58,7 @@ function Pricing() {
       </header>
       
       <div style={styles.grid}>
-        {plans.map((plan: any) => (
+        {Array.isArray(plans) && plans.map((plan: any) => (
           <PricingCard
             key={plan.id}
             plan={plan}
